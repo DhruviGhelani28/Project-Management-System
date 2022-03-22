@@ -1,0 +1,8 @@
+Django
+djangorestframework==3.13.1
+djangorestframework-simplejwt
+Pillow==8.4.0
+sqlparse==0.4.2
+whitenoise
+django-views
+PyJWT==1.7.1

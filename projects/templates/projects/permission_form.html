@@ -1,0 +1,33 @@
+{% extends 'main.html' %} {% block content %}
+
+<!-- Main Section -->
+<main class="formPage my-xl">
+  <div class="content-box">
+    <div class="formWrapper">
+      <a class="backButton" href="{% url 'myaccount' %}"
+        ><i class="im im-angle-left"></i
+      ></a>
+      <br />
+
+      <form class="form" method="POST" action="">
+        {% csrf_token %} {% for field in form %}
+        <!-- Input:Text -->
+        <div class="form__field">
+          <label for="formInput#text">{{field.label}} </label>
+          {{field}}
+        </div>
+        {% endfor %}
+
+        <input
+          class="btn btn--sub btn--lg my-md"
+          type="submit"
+          value="Submit"
+        />
+        <h6 style="color: red">
+          Note: You can give only one permission for one project to one client.
+        </h6>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock content %}

@@ -1,0 +1,342 @@
+{% extends 'main.html' %}
+
+{% block content %}
+  <!-- Main Section -->
+  <main class="settingsPage profile my-md">
+    <div class="container">
+      <div class="layout">
+        <div class="column column--1of3">
+          <div class="card text-center">
+            <div class="card__body dev">
+              <a class="tag tag--pill tag--main settings__btn" href="{% url 'editaccount' %}"><i class="im im-edit"></i> Edit</a>
+              <img class="avatar avatar--xl dev__avatar" src="{{profile.profile_image.url}}" />
+              <h2 class="dev__name">{{profile.name}}</h2>
+              {% if profile.short_intro %}
+              <p class="dev__title">{{profile.short_intro}}</p>
+              {% endif %}
+              {% if profile.location %}
+              <p class="dev__location">Based in {{profile.location}}</p>
+              {% endif %}
+              
+              <ul class="dev__social">
+
+                {% if profile.social_github %}
+                <li>
+                  <a title="Github" href="{{profile.social_github}}" target="_blank"><i class="im im-github"></i></a>
+                </li>
+                {% endif %}
+                {% if profile.social_stackoverflow %}
+                <li>
+                  <a title="Stackoverflow" href="{{profile.social_stackoverflow}}" target="_blank"><i class="im im-stackoverflow"></i></a>
+                </li>
+                {% endif %}
+                {% if profile.social_twitter %}
+                <li>
+                  <a title="Twitter" href="{{profile.social_twitter}}" target="_blank"><i class="im im-twitter"></i></a>
+                </li>
+                {% endif %}
+                {% if profile.social_linkedin %}
+                <li>
+                  <a title="LinkedIn" href="{{profile.social_linkedin}}" target="_blank"><i class="im im-linkedin"></i></a>
+                </li>
+                {% endif %}
+                {% if profile.social_youtube %}
+                <li>
+                  <a title="YouTube" href="{{profile.social_youtube}}" target="_blank"><i class="im im-youtube"></i></a>
+                </li>
+                {% endif %}
+                {% if profile.social_website %}
+                <li>
+                  <a title="Personal Website" href="{{profile.social_website}}" target="_blank"><i class="im im-globe"></i></a>
+                </li>
+                {% endif %}
+                
+              </ul> 
+            </div>
+          </div>
+          <div class="settings">
+            <h3 class="settings__title">Tasks</h3>
+          </div>
+          <table class="settings__table">
+            {% for project in projects %}
+             <tr>
+              {% for task in project.task_set.all %}
+              <tr>
+                <td class="settings__tableInfo">
+                  <p style="color:{{project.color_identity}}; font-weight: bold ;">{{project.title}}</p>
+                  
+                  <h4>{{task.name}}</h4>
+                 
+                  {% if task.description %}
+                  <p>
+                    {{task.description}}
+                  </p>
+                  {% endif %}
+                </td>
+                <td class="settings__tableActions">
+                  <a class="tag tag--pill tag--main settings__btn" href="{% url 'update-task' project.id task.id %}"><i class="im im-edit"></i> Edit</a>
+                  <a class="tag tag--pill tag--main settings__btn" href="{% url 'delete-task' project.id task.id %}?next=/myaccount/"><i class="im im-x-mark-circle-o"></i>
+                    Delete</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </table>
+
+          <div class="settings">
+            <h3 class="settings__title">Permissions</h3>
+          </div>
+          <table class="settings__table">
+            {% for project in projects %}
+              <tr>
+                
+                  <td><p style="color: Black; font-weight: bold ;">{{project.title}}</p></td>
+                  <td class="settings__tableActions">
+                  <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'create-permission' project.id %}"><i class="im im-plus"></i> Add Permission</a>
+                  </td>
+                  <td>
+                    {% for client in clients %}
+                      <tr>
+                        <td class="settings__tableInfo" >
+                          <p style="font-weight: bold ;">{{client.name}}</p>
+                        </td>
+                        <td>
+                          {% for permission in project.permission_set.all %}
+                            {% if permission.client == client %}
+                            
+                              <td class="settings__tableInfo">
+                                <h4>{{permission.name}}</h4>
+                                {% if permission.description %}
+                                <p>{{permission.description}}</p>
+                                {% endif %}
+                              </td>
+                            
+                              <td class="settings__tableActions">
+                                <a class="tag tag--pill tag--main settings__btn" href="{% url 'update-permission' project.id permission.id %}"><i class="im im-edit"></i> Edit</a>
+                                <a class="tag tag--pill tag--main settings__btn" href="{% url 'delete-permission' project.id permission.id %}?next=/myaccount/"><i class="im im-x-mark-circle-o"></i>
+                                  Delete</a>
+                              </td>
+                        
+                            {% endif %}
+                          {% endfor %}
+                        </td>
+                      <tr>
+                    {% endfor %}
+                  </td>
+               
+              </tr>
+            {% endfor %}
+            </table>
+        </div>
+        
+        <div class="column column--2of3">
+          <div class="devInfo">
+            <h3 class="devInfo__title">About Me</h3>
+            <p class="devInfo__about">
+              {{profile.bio}}
+            </p>
+          </div>
+
+          <div class="settings">
+            <h3 class="settings__title">Skills</h3>
+            <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'create-skill' %}"><i class="im im-plus"></i> Add Skill</a>
+          </div>
+          <table class="settings__table">
+            {% for skill in skills %}
+            <tr>
+              <td class="settings__tableInfo">
+                <h4>{{skill.name}}</h4>
+                {% if skill.description %}
+                <p>
+                  {{skill.description}}
+                </p>{% endif %}
+              </td>
+              <td class="settings__tableActions">
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'update-skill' skill.id %}"><i class="im im-edit"></i> Edit</a>
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'delete-skill' skill.id %}?next=/myaccount/"><i class="im im-x-mark-circle-o"></i>
+                  Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+
+          <div class="settings">
+            <h3 class="settings__title">Projects</h3>
+            <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'create-project' %}"><i class="im im-plus"></i> Add Project</a>
+          </div>
+          <table class="settings__table">
+            {% for project in projects %}
+            <tr>
+              <td class="settings__thumbnail">
+                <a href="{%  url 'project' project.id %}"><img src="{{project.featured_image.url}}" alt="Project Thumbnail" /></a>
+              </td>
+
+              <td class="settings__tableInfo">
+                <a href="{%  url 'project' project.id %}" style="color:{{project.color_identity}}; font-weight: bold ;">{{project.title}}</a><hr>
+                <a href="{%  url 'user-profile' project.owner.id %}" style="font-size: 12px;">By {{project.owner.name}}</a>
+                {% if project.description %}
+                <p>
+                  {{project.description}}
+                </p>{% endif %}
+              </td>
+              <td class="settings__tableActions">
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'update-project' project.id %}"><i class="im im-edit"></i> Edit</a>
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'delete-project' project.id %}?next=/myaccount/"><i class="im im-x-mark-circle-o"></i>
+                  Delete</a> 
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'add-task' project.id  %}"><i class="im im-edit"></i> Add Task</a>
+              </td>
+
+            </tr>
+            {% endfor %}
+          </table>
+
+          <div class="settings">
+            <h3 class="settings__title">OtherProjects</h3>
+            {% comment %} <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'create-project' %}"><i class="im im-plus"></i> Add Project</a> {% endcomment %}
+          </div>
+          <table class="settings__table">
+            {% for project in otherprojects %}
+              {% for client in project.clients %} 
+                {% if profile.name == client %}
+                <tr>
+                  <td class="settings__thumbnail">
+                    <a href="{%  url 'project' project.id %}"><img src="{{project.featured_image.url}}" alt="Project Thumbnail" /></a>
+                  </td>
+    
+                  <td class="settings__tableInfo">
+                    <a href="{%  url 'project' project.id %}" style="color:{{project.color_identity}}; font-weight: bold ;">{{project.title}}</a><hr>
+                    <a href="{%  url 'user-profile' project.owner.id %}" style="font-size: 12px ;">By {{project.owner.name}}</a>
+                    {% if project.description %}
+                    <p>
+                      {{project.description}}
+                    </p>{% endif %}
+                  </td>
+                  <td class="settings__tableActions">
+                  {% if "Edit" in project.permissions %}
+                    <a class="tag tag--pill tag--main settings__btn" href="{% url 'update-project' project.id %}"><i class="im im-edit"></i> Edit</a>
+                    <a class="tag tag--pill tag--main settings__btn" href="{% url 'add-task' project.id  %}"><i class="im im-edit"></i> Add Task</a>
+                  {% endif %}
+
+                  {% if "Delete" in project.permissions %}
+                    <a class="tag tag--pill tag--main settings__btn" href="{% url 'delete-project' project.id %}?next=/myaccount/"><i class="im im-x-mark-circle-o"></i>
+                      Delete</a> 
+                  {% endif %}
+                  {% if "Share" in project.permissions %}
+                    <a class="tag tag--pill tag--main settings__btn" href=""><i class="im im-edit"></i> 
+                      Share</a> 
+                  {% endif %}
+                  </td>
+    
+                </tr>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+
+{% endblock content %}
+{% comment %} {% endcomment %}
+{% comment %} {% url 'delete-task' task.id %}?next=/myaccount/ {% endcomment %}
+ {% comment %} <td>
+                  {% for permission in project.permission_set.all %}
+              
+                    <td class="settings__tableInfo">
+                      <h4>{{permission.name}}</h4>
+                      <p>
+                        {{permission.description}}
+                      </p>
+                    </td>
+                  
+                  {% endfor %}
+                </td> {% endcomment %}
+
+{% comment %} {% if count >= 1 %}
+              <tr>
+                <td class="settings__thumbnail">
+                  <a href="{%  url 'project' project.id %}"><img src="{{project.featured_image.url}}" alt="Project Thumbnail" /></a>
+                </td>
+  
+                <td class="settings__tableInfo">
+                  <a href="{%  url 'project' project.id %}" style="color:{{project.color_identity}}; font-weight: bold ;">{{project.title}}</a>
+                  <p>
+                    {{project.description}}
+                  </p>
+                </td>
+
+                <td class="settings__tableActions">
+                  {% if "edit" == projet.permission_set.filter(name__exact="edit") %}
+                  <a class="tag tag--pill tag--main settings__btn" href="{% url 'update-project' project.id %}"><i class="im im-edit"></i> Edit</a>
+                  <a class="tag tag--pill tag--main settings__btn" href="{% url 'add-task' project.id  %}"><i class="im im-edit"></i> Add Task</a>
+                  {% endif %}
+                  {% if "delete" == projet.permission_set.filter(name="delete") %}
+                  <a class="tag tag--pill tag--main settings__btn" href="{% url 'delete-project' project.id %}?next=/myaccount/"><i class="im im-x-mark-circle-o"></i>
+                    Delete</a> 
+                  {% endif %}
+                  
+                </td>
+              </tr>
+                {% endif %} {% endcomment %}
+
+{% comment %} <tr>
+              <td class="singleProject__subtitle" class="settings__tableInfo">
+                <p>Permissions</p>
+              </td>
+              <td>
+                <div class="singleProject__toolStack">
+                  {% for permission in project.permission_set.all %}
+                  <td>
+                  <span class="tag tag--pill tag--sub tag--lg">
+                      <small>{{permission}}</small>
+                  </span>
+                  </td>
+                  {% endfor %}
+                </div>
+              </td>
+            </tr> {% endcomment %}
+
+{% comment %} {{count}} = {{count}} + 1 {% endcomment %}
+
+
+{% comment %} {% for project in otherprojects %}
+              <tr>
+              {% for permission in project.permission_set.all %}
+                
+                {% if permission.client.name == profile.name %}
+
+                  <tr>
+                  <td class="settings__tableActions">
+                    {% if permission.name == "edit" %}
+                      <a class="tag tag--pill tag--main settings__btn" href="{% url 'update-project' project.id %}"><i class="im im-edit"></i> Edit</a>
+                      <a class="tag tag--pill tag--main settings__btn" href="{% url 'add-task' project.id  %}"><i class="im im-edit"></i> Add Task</a>
+                    {% endif %}
+                  </td><td>
+                    {% if permission.name == "delete" %}
+                      <a class="tag tag--pill tag--main settings__btn" href="{% url 'delete-project' project.id %}?next=/myaccount/"><i class="im im-x-mark-circle-o"></i>
+                      Delete</a> 
+                    {% endif %}
+                  </td>
+                  </tr>
+                   
+                {% endif %}
+                <td class="settings__thumbnail">
+                  <a href="{%  url 'project' project.id %}"><img src="{{project.featured_image.url}}" alt="Project Thumbnail" /></a>
+                </td>
+  
+                <td class="settings__tableInfo">
+                  <a href="{%  url 'project' project.id %}" style="color:{{project.color_identity}}; font-weight: bold ;">{{project.title}}</a>
+                  <p>
+                    {{project.description}}
+                  </p>
+                </td>
+                
+              {% endfor %}
+                    
+                  
+              </tr>
+            {% endfor %} {% endcomment %}
