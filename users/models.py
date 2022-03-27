@@ -54,3 +54,22 @@ class Skill(models.Model):
 #     def __str__(self):
 #         return str(self.name)
 
+
+class Roll(models.Model):
+    ROLL_TYPE=(
+        ('Supplier','Supplier'),
+        ('Worker','Worker'),
+        ('Customer','Customer'),
+        ('Agency','Agency'),
+        ('Model','Model'),
+    )
+    name = models.CharField( max_length=100 , blank=False, null=True, choices=ROLL_TYPE )
+    created = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, unique=True )
+    
+    def __str__(self) -> str:
+        return str(self.name)
+
+class Registration(models.Model):
+    roll = models.ForeignKey(Roll, on_delete=models.SET_NULL, null=True, blank=False)
+    
