@@ -56,7 +56,10 @@
           </div>
           <div class="settings">
             <h3 class="settings__title">Tasks</h3>
+            {% comment %} <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'create-task' %}"><i class="im im-plus"></i> Add Task</a> {% endcomment %}
           </div>
+         
+          
           <table class="settings__table">
             {% for project in projects %}
              <tr>

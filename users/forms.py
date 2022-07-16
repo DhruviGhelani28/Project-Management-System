@@ -8,10 +8,10 @@ from .models import Profile, Skill, Roll
 from django import forms
 
 class CustomUserCreationForm(UserCreationForm):
-    roll = forms.ForeignKey(Roll, )
+    # roll = forms.ForeignKey(Roll, )
     class Meta:
         model = User
-        fields = ['first_name','email','username','password1','password2','roll']
+        fields = ['first_name','email','username','password1','password2']
         labels = {
             'first_name' : 'Name',
         }
